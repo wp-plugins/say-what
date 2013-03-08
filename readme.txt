@@ -12,23 +12,23 @@ An easy-to-use plugin that allows you to alter strings on your site without edit
 == Installation ==
 
 1. Install it as you would any other plugin
-2. Activate it
-3. Head over to Tools &raquo; Text changes and configure some string replacements
+1. Activate it
+1. Head over to Tools &raquo; Text changes and configure some string replacements
 
 This plugin may produce performance issues if you use it to configure a large number of string translations. I'd be interested in feedback if that's the case.
 
-### Frequently Asked Questions
+== Frequently Asked Questions ==
 
-#### Can I use it to change any string?
+= Can I use it to change any string? =
 You can only use the plugin to translate strings which are marked for translation.
 
-#### How do I find the string to translate?
+= How do I find the string to translate? =
 You can either have a guess, or checkout the plugin in question's source code, translatable strings are generally wrapped in __(), _e(), or _x(), for example:
 
 $foo = __('This is a translatable string', 'plugin-domain');
 
 
-=== Changelog ===
+== Changelog ==
 
 = 0.9 =
 Beta ready for testing and feedback
