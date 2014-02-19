@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: Say What?
+Plugin Name: Say What? - Easy string replacements
 Plugin URI: https://github.com/leewillis77/say-what
 Description: An easy-to-use plugin that allows you to alter strings on your site without editing WordPress core, or plugin code
 Version: 0.9.2
