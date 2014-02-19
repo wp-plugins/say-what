@@ -1,7 +1,7 @@
-=== Say what? ===
+=== Say what? - Easy string replacements ===
 Contributors: leewillis77
 Donate link: http://www.leewillis.co.uk/wordpress-plugins/?utm_source=wordpress&utm_medium=www&utm_campaign=say-what
-Tags: string, change, translation
+Tags: string, change, translation, replace, swap, override
 Requires at least: 3.5
 Tested up to: 3.5.1
 Stable tag: 0.9.2
