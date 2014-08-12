@@ -4,7 +4,7 @@
 Plugin Name: Say What?
 Plugin URI: https://github.com/leewillis77/say-what
 Description: An easy-to-use plugin that allows you to alter strings on your site without editing WordPress core, or plugin code
-Version: 1.0
+Version: 1.0.1
 Author: Lee Willis
 Author URI: http://www.leewillis.co.uk/
 */
@@ -129,7 +129,7 @@ function say_what_install() {
                          `string_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                          `orig_string` text NOT NULL,
                          `domain` varchar(255),
-                         `replacement_string` text
+                         `replacement_string` text,
                          `context` text
                          )";
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
