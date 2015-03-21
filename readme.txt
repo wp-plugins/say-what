@@ -4,7 +4,7 @@ Donate link: http://www.leewillis.co.uk/wordpress-plugins/?utm_source=wordpress&
 Tags: string, change, translation
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.1
+Stable tag: 1.3
 
 == Description ==
 An easy-to-use plugin that allows you to alter strings on your site without editing WordPress core, or plugin code. Simply enter the current string, and what you want to replace it with and the plugin will automatically do the rest!
@@ -29,6 +29,16 @@ You can either have a guess, or checkout the plugin in question's source code, t
 
 `$foo = __('This is a translatable string', 'plugin-domain');`
 
+= Is there any support for importing replacements? =
+"Say What?" has preliminary support for exporting, and importing replacements via [http://wp-cli.org/](WP-CLI). The following commands are currently
+supported:
+* export - Export all current string replacements.
+* import - Import string replacements from a CSV file.
+* list - Export all current string replacements. Synonym for 'export'.
+* update - update string replacements from a CSV file.
+
+See the [GitHub homepage](https://github.com/leewillis77/say-what) for examples.
+
 == Screenshots ==
 
 1. Finding a string to replace
@@ -37,6 +47,9 @@ You can either have a guess, or checkout the plugin in question's source code, t
 
 
 == Changelog ==
+
+= 1.2 =
+Swap database to UTF-8 to fix problems entering non-ASCII strings.
 
 = 1.1 =
 Fix incorrect escaping on the admin screens.
