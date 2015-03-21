@@ -4,7 +4,7 @@
 Plugin Name: Say What?
 Plugin URI: https://github.com/leewillis77/say-what
 Description: An easy-to-use plugin that allows you to alter strings on your site without editing WordPress core, or plugin code
-Version: 1.1
+Version: 1.3
 Author: Lee Willis
 Author URI: http://www.leewillis.co.uk/
 */
@@ -31,32 +31,39 @@ Author URI: http://www.leewillis.co.uk/
  * **********************************************************************
  */
 
-if ( ! defined( 'ABSPATH' ) )
-    exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
+define( 'SAY_WHAT_DB_VERSION', 3 );
 
 /**
  * Main plugin class, responsible for triggering everything
  */
-class say_what {
+class SayWhat {
 
 	private $settings_instance;
 	private $frontend_instance;
 	private $admin_instance;
-	private $db_version = 2;
+	private $db_version = SAY_WHAT_DB_VERSION;
 
 	/**
 	 * Constructor
 	 */
 	public function __construct(){
 		require_once ( 'say-what-settings.php' );
-		$this->settings_instance = new say_what_settings();
+		$this->settings_instance = new SayWhatSettings();
 		if ( is_admin() ) {
 			require_once ( 'say-what-admin.php' );
-			$this->admin_instance = new say_what_admin( $this->settings_instance );
+			$this->admin_instance = new SayWhatAdmin( $this->settings_instance );
 		}
 		require_once ( 'say-what-frontend.php' );
-		$this->frontend_instance = new say_what_frontend( $this->settings_instance );
+		$this->frontend_instance = new SayWhatFrontend( $this->settings_instance );
 
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			require_once( 'say-what-cli.class.php');
+			WP_CLI::add_command( 'say-what', 'SayWhatCli' );
+		}
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
@@ -103,19 +110,36 @@ class say_what {
 	 * Database v2 upgrade.
 	 *
 	 * Add context to database schema.
+	 *
+	 * @SuppressWarnings(PMD.UnusedPrivateMethod)
 	 */
 	private function upgrade_db_to_2() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'say_what_strings';
 		$sql = "CREATE TABLE $table_name (
-		                     `string_id` int(11) NOT NULL AUTO_INCREMENT,
-		                     `orig_string` text NOT NULL,
-		                     `domain` varchar(255),
-		                     `replacement_string` text,
-		                     `context` text
-		                     )";
+							 string_id int(11) NOT NULL AUTO_INCREMENT,
+							 orig_string text NOT NULL,
+							 domain varchar(255),
+							 replacement_string text,
+							 context text
+							 )";
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
+	}
+
+	/**
+	 * Database v3 upgrade.
+	 *
+	 * Convert character set to utf8.
+	 *
+	 * @SuppressWarnings(PMD.UnusedPrivateMethod)
+	 */
+	private function upgrade_db_to_3() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'say_what_strings';
+		$sql = "ALTER TABLE $table_name
+				CONVERT TO CHARACTER SET utf8";
+		$wpdb->query( $sql );
 	}
 }
 
@@ -123,18 +147,19 @@ class say_what {
  * Install function. Create the table to store the replacements
  */
 function say_what_install() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'say_what_strings';
-    $sql = "CREATE TABLE $table_name (
-                         `string_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                         `orig_string` text NOT NULL,
-                         `domain` varchar(255),
-                         `replacement_string` text,
-                         `context` text
-                         )";
-    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-    dbDelta( $sql );
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'say_what_strings';
+	$sql = "CREATE TABLE $table_name (
+						 string_id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+						 orig_string text NOT NULL,
+						 domain varchar(255),
+						 replacement_string text,
+						 context text
+						 ) DEFAULT CHARACTER SET utf8";
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	dbDelta( $sql );
+	update_option( 'say_what_db_version', SAY_WHAT_DB_VERSION );
 }
 register_activation_hook( __FILE__, 'say_what_install' );
 
-$say_what = new say_what();
+$say_what = new SayWhat();

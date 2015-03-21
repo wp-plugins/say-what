@@ -1,14 +1,22 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) )
-    exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 /**
  * Settings class. Possibly overkill at the moment
  */
-class say_what_settings {
+class SayWhatSettings {
+
 	public $replacements;
-	function __construct() {
+
+	/**
+	 * Constructor.
+	 *
+	 * Loads the settings from the database.
+	 */
+	public function __construct() {
 		global $wpdb, $table_prefix;
 		// @TODO - Read other settings in when we have them
 		$sql = "SELECT * FROM {$table_prefix}say_what_strings";
